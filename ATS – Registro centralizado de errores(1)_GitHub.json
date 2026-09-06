@@ -1,0 +1,494 @@
+{
+  "name": "ATS – Registro centralizado de errores",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "44fc8a6a-663e-4eef-9b2d-44a2c9eaa743",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appDLuVv0eYArcrmJ",
+          "mode": "list",
+          "cachedResultName": "ATS IA – Entrega Final Coderhouse",
+          "cachedResultUrl": ""
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblgmZOYllV74y5by",
+          "mode": "list",
+          "cachedResultName": "Ejecuciones y errores",
+          "cachedResultUrl": ""
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Error resuleto": false,
+            "Requiere intervención humana": true,
+            "Fecha y hora de ejecución": "={{ DateTime.fromISO($json.execution?.startedAt || $now.toISO()).minus({ hours: 3 }).toISO() }}",
+            "Resumen de la ejecución": "={{ 'Falló el workflow ' + ($json.workflow?.name || 'Sin identificar') + ' en el nodo ' + ($json.execution?.lastNodeExecuted || 'Sin identificar') }}",
+            "Logs o detalles técnicos": "={{ JSON.stringify($json) }}",
+            "Nombre del workflow": "={{ $json.workflow?.name || 'Sin identificar' }}",
+            "Etapa o nodo": "={{ $json.execution?.lastNodeExecuted || 'Sin identificar' }}",
+            "Mensaje de error": "={{ $json.execution?.error?.message || $json.error?.message || 'Sin detalle disponible' }}",
+            "Observaciones": "Registro automático generado por el Error Trigger de n8n.",
+            "Origen integración": "n8n",
+            "Tipo de evento": "Error",
+            "Resultado": "Error",
+            "Tipo de error": "={{ (() => {\n  const texto = (\n    ($json.execution?.lastNodeExecuted || '') + ' ' +\n    ($json.execution?.error?.message || '')\n  ).toLowerCase();\n\n  if (texto.includes('airtable')) return 'Error de Airtable';\n  if (texto.includes('google drive') || texto.includes('drive')) {\n    return 'Error de Google Drive';\n  }\n  if (texto.includes('gmail')) return 'Error de Gmail';\n  if (\n    texto.includes('openai') ||\n    texto.includes('structured output') ||\n    texto.includes('model output') ||\n    texto.includes('analizar perfil')\n  ) return 'Error de API IA';\n  if (texto.includes('slack')) return 'Error de Slack';\n  if (texto.includes('timeout') || texto.includes('timed out')) {\n    return 'Timeout';\n  }\n  if (texto.includes('duplicate') || texto.includes('duplicado')) {\n    return 'Registro duplicado';\n  }\n\n  return 'Otro';\n})() }}",
+            "Número de intento": 1
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID ejecución",
+              "displayName": "ID ejecución",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Número interno ejecución",
+              "displayName": "Número interno ejecución",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Fecha y hora de ejecución",
+              "displayName": "Fecha y hora de ejecución",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Origen integración",
+              "displayName": "Origen integración",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Google Forms",
+                  "value": "Google Forms"
+                },
+                {
+                  "name": "Google Sheets",
+                  "value": "Google Sheets"
+                },
+                {
+                  "name": "Google Drive",
+                  "value": "Google Drive"
+                },
+                {
+                  "name": "Airtable",
+                  "value": "Airtable"
+                },
+                {
+                  "name": "OpenAI",
+                  "value": "OpenAI"
+                },
+                {
+                  "name": "Slack",
+                  "value": "Slack"
+                },
+                {
+                  "name": "Gmail",
+                  "value": "Gmail"
+                },
+                {
+                  "name": "n8n",
+                  "value": "n8n"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tipo de evento",
+              "displayName": "Tipo de evento",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Inicio de ejecución",
+                  "value": "Inicio de ejecución"
+                },
+                {
+                  "name": "Validación de datos",
+                  "value": "Validación de datos"
+                },
+                {
+                  "name": "Extracción de CV",
+                  "value": "Extracción de CV"
+                },
+                {
+                  "name": "Seudonimización",
+                  "value": "Seudonimización"
+                },
+                {
+                  "name": "Análisis de IA",
+                  "value": "Análisis de IA"
+                },
+                {
+                  "name": "Notificación Slack",
+                  "value": "Notificación Slack"
+                },
+                {
+                  "name": "Decisión humana",
+                  "value": "Decisión humana"
+                },
+                {
+                  "name": "Envío Gmail",
+                  "value": "Envío Gmail"
+                },
+                {
+                  "name": "Reintento",
+                  "value": "Reintento"
+                },
+                {
+                  "name": "Fin de ejecución",
+                  "value": "Fin de ejecución"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Resumen de la ejecución",
+              "displayName": "Resumen de la ejecución",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Vacante vinculada",
+              "displayName": "Vacante vinculada",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Postulación vinculada",
+              "displayName": "Postulación vinculada",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Logs o detalles técnicos",
+              "displayName": "Logs o detalles técnicos",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Nombre del workflow",
+              "displayName": "Nombre del workflow",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Etapa o nodo",
+              "displayName": "Etapa o nodo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Resultado",
+              "displayName": "Resultado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Exitosa",
+                  "value": "Exitosa"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                },
+                {
+                  "name": "Revisión manual",
+                  "value": "Revisión manual"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tipo de error",
+              "displayName": "Tipo de error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "No corresponde",
+                  "value": "No corresponde"
+                },
+                {
+                  "name": "Datos incompletos",
+                  "value": "Datos incompletos"
+                },
+                {
+                  "name": "Consentimiento faltante",
+                  "value": "Consentimiento faltante"
+                },
+                {
+                  "name": "Cv ilegible",
+                  "value": "Cv ilegible"
+                },
+                {
+                  "name": "Error de Google Drive",
+                  "value": "Error de Google Drive"
+                },
+                {
+                  "name": "Error de Airtable",
+                  "value": "Error de Airtable"
+                },
+                {
+                  "name": "Error de API IA",
+                  "value": "Error de API IA"
+                },
+                {
+                  "name": "Error de Slack",
+                  "value": "Error de Slack"
+                },
+                {
+                  "name": "Error de Gmail",
+                  "value": "Error de Gmail"
+                },
+                {
+                  "name": "Registro duplicato",
+                  "value": "Registro duplicato"
+                },
+                {
+                  "name": "Timeout",
+                  "value": "Timeout"
+                },
+                {
+                  "name": "Otro",
+                  "value": "Otro"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Mensaje de error",
+              "displayName": "Mensaje de error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Número de intento",
+              "displayName": "Número de intento",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Duración en segundos",
+              "displayName": "Duración en segundos",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Modelo de IA utilizado",
+              "displayName": "Modelo de IA utilizado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Tokens de entrada",
+              "displayName": "Tokens de entrada",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Tokens de salida",
+              "displayName": "Tokens de salida",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Costo estimado USD",
+              "displayName": "Costo estimado USD",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Error resuleto",
+              "displayName": "Error resuleto",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Requiere intervención humana",
+              "displayName": "Requiere intervención humana",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Observaciones",
+              "displayName": "Observaciones",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "f183035a-cc3f-42ca-af9a-034ded3fbaa4",
+      "name": "Registrar error en Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "Configure airtableTokenApi"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Registrar error en Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "tags": []
+}
