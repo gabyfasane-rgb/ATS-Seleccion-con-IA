@@ -51,8 +51,7 @@ El objetivo es mejorar la eficiencia del proceso de selección sin delegar la de
 
 * [Manual operativo y documentación completa](./Manual_Entrega_Final_ATS_IA.pdf)
 * [Diagrama de arquitectura](./Arquitectura_ATS_IA_Final.pdf)
-* [Archivo editable del diagrama](./Arquitectura_ATS_IA_Final.drawio)
-* [Manual editable](./Manual_Entrega_Final_ATS_IA.docx)
+
 
 ## Workflows sanitizados
 
