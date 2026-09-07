@@ -65,7 +65,7 @@ Los archivos fueron exportados sin credenciales, API keys, webhooks activos ni i
 
 * [Dashboard de control – KPI y tasa de errores](https://airtable.com/appDLuVv0eYArcrmJ/shreOQxbb2Kk7Ro8W/tblevK0wyQxzUrESe)
 * [Base de postulaciones seudonimizadas – modo lectura](https://airtable.com/appDLuVv0eYArcrmJ/shrOUdDQFp7fRtsb4/tblt5XMppJZPx3iQI)
-* **Video demostrativo:** pendiente de incorporación.
+- [Video demostrativo del sistema](https://drive.google.com/file/d/1T7b_34qQH5bZFdGopDNWuvPDmzxPuMIG/view?usp=sharing)
 
 ## Resultados de las pruebas
 
